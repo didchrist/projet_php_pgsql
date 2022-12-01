@@ -1,0 +1,76 @@
+/* tableau */
+section {
+  flex-direction: column;
+  justify-content: start !important;
+}
+.section-table {
+  margin-bottom: 10px;
+}
+.ligne-presentation,
+.ligne {
+  display: flex;
+  justify-content: center;
+}
+.ligne div,
+.ligne-presentation div {
+  padding: 5px 10px 5px 10px;
+  border: 1px solid black;
+  width: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ligne-presentation {
+  background-color: #3366889d;
+}
+/* bouton */
+button {
+  margin: 5px;
+}
+.button-modify {
+  background-color: rgba(0, 0, 255, 0.678);
+  border: 1px solid rgba(0, 0, 0, 0.521);
+  border-radius: 3px;
+  padding: 5px;
+  color: white;
+}
+.button-show {
+  background-color: gray;
+  border: 1px solid rgba(0, 0, 0, 0.555);
+  border-radius: 3px;
+  padding: 5px;
+  color: white;
+}
+.button-delete {
+  background-color: rgba(218, 47, 47, 0.808);
+  border: 1px solid rgba(0, 0, 0, 0.555);
+  border-radius: 3px;
+  padding: 5px;
+  color: white;
+}
+button:hover {
+  cursor: pointer;
+  opacity: 0.9;
+}
+/* reste */
+h2 {
+  font-size: 3rem;
+}
+section a {
+  text-decoration: none;
+  color: white;
+  border: 1px solid rgba(0, 0, 0, 0.534);
+  border-radius: 2px;
+  background-color: #2b65bd9d;
+  font-size: 2rem;
+  padding: 10px;
+}
+.button-presentation {
+  margin: 20px;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.button-presentation a:hover {
+  opacity: 0.9;
+}
