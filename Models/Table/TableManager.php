@@ -33,4 +33,40 @@ class TableManager extends Database
         $statement = $this->getBdd()->prepare($req);
         $statement->execute([$designation, $prixUnitaire]);
     }
+    public function getClients()
+    {
+        $req = 'SELECT * FROM client';
+        $statement = $this->getBdd()->prepare($req);
+        $statement->execute();
+        $clients = $statement->fetchAll();
+        $statement->closeCursor();
+        return $clients;
+    }
+    public function addClient($nom, $adresse)
+    {
+        $req = 'INSERT INTO client (nomClient, adresseClient) VALUES (?, ?)';
+        $statement = $this->getBdd()->prepare($req);
+        $statement->execute([$nom, $adresse]);
+    }
+    public function deleteClient($id)
+    {
+        $req = 'DELETE FROM client WHERE id = ?';
+        $statement = $this->getBdd()->prepare($req);
+        $statement->execute([$id]);
+    }
+    public function getCommandes()
+    {
+        $req = 'SELECT c.*, cl.nomClient FROM commande c, client cl WHERE c.client_id = cl.id';
+        $statement = $this->getBdd()->prepare($req);
+        $statement->execute();
+        $commandes = $statement->fetchAll();
+        $statement->closeCursor();
+        return $commandes;
+    }
+    public function addCommande($client)
+    {
+        $req = 'INSERT INTO commande (cliend_id) VALUES (?)';
+        $statement = $this->getBdd()->prepare($req);
+        $statement->execute([$client]);
+    }
 }

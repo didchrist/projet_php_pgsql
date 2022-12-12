@@ -23,6 +23,24 @@ if (empty($page)) {
     } elseif ($page === 'addArticle') {
         $tableController->addArticle();
         $style = './assets/css/form.css';
+    } elseif ($page === 'client') {
+        $tableController->show_table_client();
+        $style = './assets/css/table.css';
+    } elseif ($page === 'addClient') {
+        $tableController->addClient();
+        $style = './assets/css/form.css';
+    } elseif ($page === 'commande') {
+        $tableController->show_table_commande();
+        $style = './assets/css/table.css';
+    } elseif ($page === 'addCommande') {
+        $tableController->addCommande();
+        $style = './assets/css/form.css';
+    } elseif ($page === 'supprArticle') {
+        $tableController->removeArticle();
+        $style = './assets/css/table.css';
+    } elseif ($page === 'supprClient') {
+        $tableController->removeClient();
+        $style = './assets/css/table.css';
     }
 }
 

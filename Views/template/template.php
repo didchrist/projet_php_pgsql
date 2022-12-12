@@ -32,10 +32,10 @@
                 <a href="article">
                     <li>Article</li>
                 </a>
-                <a href="#">
+                <a href="client">
                     <li>Client</li>
                 </a>
-                <a href="#">
+                <a href="commande">
                     <li>Commande</li>
                 </a>
                 <a href="#">
