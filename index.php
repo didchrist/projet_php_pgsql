@@ -41,6 +41,9 @@ if (empty($page)) {
     } elseif ($page === 'supprClient') {
         $tableController->removeClient();
         $style = './assets/css/table.css';
+    } elseif ($page === 'ligneCommande') {
+        $tableController->show_ligneCommandes();
+        $style = './assets/css/table.css';
     }
 }
 

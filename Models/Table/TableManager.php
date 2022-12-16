@@ -54,6 +54,15 @@ class TableManager extends Database
         $statement = $this->getBdd()->prepare($req);
         $statement->execute([$id]);
     }
+    public function getClient($id)
+    {
+        $req = 'SELECT * FROM client cl WHERE id = ?';
+        $statement = $this->getBdd()->prepare($req);
+        $statement->execute([$id]);
+        $client = $statement->fetch();
+        $statement->closeCursor();
+        return $client;
+    }
     public function getCommandes()
     {
         $req = 'SELECT c.*, cl.nomClient FROM commande c, client cl WHERE c.client_id = cl.id';
@@ -77,5 +86,16 @@ class TableManager extends Database
         $nombre_commandes = $statement->fetch();
         $statement->closeCursor();
         return $nombre_commandes;
+    }
+    public function getligneCommandes($id)
+    {
+        $req = 'SELECT a.id AS idarticle, c.numeroCommande, a.designation, a.prixUnitaire, lc.quantite, a.prixUnitaire*lc.quantite AS total
+        FROM commande c, article a, client cl , ligneCommande lc 
+        WHERE lc.commande_id= c.id AND lc.article_id = a.id AND c.client_id=cl.id AND c.id = ?';
+        $statement = $this->getBdd()->prepare($req);
+        $statement->execute([$id]);
+        $ligneCommandes = $statement->fetchAll();
+        $statement->closeCursor();
+        return $ligneCommandes;
     }
 }

@@ -154,11 +154,86 @@
             <p></p>
         </div>
         <div>
-            <form action="" method="POST">
+            <form action="ligneCommande" method="POST">
                 <button type="submit" class="button-modify">Modifier</button>
                 <button type="submit" class="button-show">Afficher</button>
+                <input type="hidden" name="id" value="<?= $commande->id ?>">
+            </form>
+            <form action="">
                 <button type="submit" class="button-delete">Supprimer</button>
             </form>
+        </div>
+    </div>
+    <?php endforeach; ?>
+    <?php elseif ($table === 'ligneCommande') : ?>
+    <div>
+        <label for="numero">Numéro : </label>
+        <input name="numero" value="<?= $client->numeroclient ?? '' ?>" type="text" readonly>
+        <label for="date">Date : </label>
+        <input name="date" value="<?= $client->date ?? '' ?>" type="text" readonly>
+        <label for="client">Client : </label>
+        <input name="client" value="<?= $client->nomclient ?? '' ?>" type="text" readonly>
+        <div>
+            <p></p>
+        </div>
+    </div>
+    <div class="ligne-presentation">
+        <div>
+            <p>Code</p>
+        </div>
+        <div>
+            <p>Designation</p>
+        </div>
+        <div>
+            <p>Prix Unitaire</p>
+        </div>
+        <div>
+            <p>Quantite</p>
+        </div>
+        <div>
+            <p>Total</p>
+        </div>
+    </div>
+    <div class="ligne">
+        <div>
+            <p>Auto-généré</p>
+        </div>
+        <div>
+            <form action="" method="POST">
+                <select name="designation">
+                    <?php foreach ($articles as $article) : ?>
+                    <option value="<?= $article->id ?>" onchange="prixUnitaire(this.value)"><?= $article->designation ?>
+                    </option>
+                    <?php endforeach; ?>
+                </select>
+        </div>
+        <div>
+            <p id="prixunitaire"></p>
+        </div>
+        <div>
+            <input name="quantite" type="number">
+        </div>
+        <div>
+            <button class="button-modify" type="submit">Valider</button>
+            </form>
+        </div>
+    </div>
+    <?php foreach ($ligneCommandes as $lignecommande) : ?>
+    <div class="ligne">
+        <div>
+            <p><?= $lignecommande->numeroarticle; ?></p>
+        </div>
+        <div>
+            <p><?= $lignecommande->designation; ?></p>
+        </div>
+        <div>
+            <p><?= $lignecommande->prixunitaire; ?></p>
+        </div>
+        <div>
+            <p><?= $lignecommande->quantite; ?></p>
+        </div>
+        <div>
+            <p><?= $lignecommande->total; ?></p>
         </div>
     </div>
     <?php endforeach; ?>
@@ -172,5 +247,15 @@ function confirmer() {
     } else {
         return false;
     }
+}
+
+function prixUnitaire(valeur) {
+    var xml = new XMLHttpRequest();
+    xml.open('POST', 'index.php?page=ligneCommande');
+    xml.onload = () => {
+        var data = JSON.parse(request.reponseText);
+        document.getElementById("prixunitaire").innerHTML = valeur;
+    }
+    xml.send();
 }
 </script>

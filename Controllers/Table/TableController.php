@@ -25,7 +25,8 @@ class TableController
             'adresse' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
             'article-index' => FILTER_SANITIZE_NUMBER_INT,
             'client-index' => FILTER_SANITIZE_NUMBER_INT,
-            'client' => FILTER_SANITIZE_NUMBER_INT
+            'client' => FILTER_SANITIZE_NUMBER_INT,
+            'id' => FILTER_SANITIZE_NUMBER_INT
         ]);
     }
 
@@ -171,5 +172,15 @@ class TableController
             }
         }
         require_once './Views/form_table.php';
+    }
+    public function show_ligneCommandes()
+    {
+        $this->getClean();
+        $id = $_POST['id'];
+        $table = 'ligneCommande';
+        $client = $this->tableManager->getClient($id);
+        $articles = $this->tableManager->getArticles();
+        $ligneCommandes = $this->tableManager->getligneCommandes($id);
+        require_once './Views/table.php';
     }
 }
