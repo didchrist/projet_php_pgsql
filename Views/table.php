@@ -54,9 +54,15 @@
     <h2>LISTE CLIENT</h2>
     <div class="button-presentation">
         <a href="addClient">Nouveau client</a>
+        <?php if (isset($error)) : ?>
+        <p class="error"><?= $error ?></p>
+        <?php endif; ?>
         <a href="#">Imprimer</a>
     </div>
     <div class="ligne-presentation">
+        <div>
+            <p>Image</p>
+        </div>
         <div>
             <p>CODE</p>
         </div>
@@ -76,6 +82,9 @@
     <?php foreach ($clients as $client) : ?>
     <div class="ligne">
         <div>
+            <img src="<?= $client->image ?>" alt="" width="25%">
+        </div>
+        <div>
             <p><?= $client->numeroclient; ?></p>
         </div>
         <div>
@@ -92,7 +101,7 @@
                 <button type="submit" class="button-modify">Modifier</button>
                 <input type="hidden" name="client-index" value="<?= $client->id ?>">
             </form>
-            <form action="supprClient" method="POST">
+            <form action="supprClient" method="POST" onsubmit="return confirmer()">
                 <input type="hidden" name="client-index" value="<?= $client->id ?>">
                 <button type="submit" class="button-show">Afficher</button>
                 <button type="submit" class="button-delete">Supprimer</button>
@@ -133,10 +142,10 @@
             <p><?= $commande->numerocommande; ?></p>
         </div>
         <div>
-            <p><?= $article->datecommande; ?></p>
+            <p><?= $commande->datecommande; ?></p>
         </div>
         <div>
-            <p><?= $article->nomclient; ?> €</p>
+            <p><?= $commande->nomclient; ?></p>
         </div>
         <div>
             <p></p>
@@ -155,3 +164,13 @@
     <?php endforeach; ?>
     <?php endif; ?>
 </section>
+<script>
+function confirmer() {
+    var msg = "Voulez-vous vraiment supprimer ce client ?"
+    if (confirm(msg)) {
+        location.replace('index.php?page=supprClient');
+    } else {
+        return false;
+    }
+}
+</script>

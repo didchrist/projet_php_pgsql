@@ -42,11 +42,11 @@ class TableManager extends Database
         $statement->closeCursor();
         return $clients;
     }
-    public function addClient($nom, $adresse)
+    public function addClient($nom, $adresse, $image)
     {
-        $req = 'INSERT INTO client (nomClient, adresseClient) VALUES (?, ?)';
+        $req = 'INSERT INTO client (nomClient, adresseClient, Image) VALUES (?, ?, ?)';
         $statement = $this->getBdd()->prepare($req);
-        $statement->execute([$nom, $adresse]);
+        $statement->execute([$nom, $adresse, $image]);
     }
     public function deleteClient($id)
     {
@@ -65,8 +65,17 @@ class TableManager extends Database
     }
     public function addCommande($client)
     {
-        $req = 'INSERT INTO commande (cliend_id) VALUES (?)';
+        $req = 'INSERT INTO commande (client_id) VALUES (?)';
         $statement = $this->getBdd()->prepare($req);
         $statement->execute([$client]);
+    }
+    public function errorSupprClient($client)
+    {
+        $req = 'SELECT COUNT(*) FROM commande c, client cl WHERE c.client_id = cl.id';
+        $statement = $this->getBdd()->prepare($req);
+        $statement->execute();
+        $nombre_commandes = $statement->fetch();
+        $statement->closeCursor();
+        return $nombre_commandes;
     }
 }

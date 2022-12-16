@@ -3,6 +3,7 @@
 namespace Controllers\Table;
 
 use Models\Table\TableManager;
+use PDOException;
 
 class TableController
 {
@@ -23,7 +24,8 @@ class TableController
             'nom' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
             'adresse' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
             'article-index' => FILTER_SANITIZE_NUMBER_INT,
-            'client-index' => FILTER_SANITIZE_NUMBER_INT
+            'client-index' => FILTER_SANITIZE_NUMBER_INT,
+            'client' => FILTER_SANITIZE_NUMBER_INT
         ]);
     }
 
@@ -104,11 +106,28 @@ class TableController
     {
         $this->getClean();
         $form = 'client';
+        require_once './Views/errors.php';
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (isset($_POST['nom']) and isset($_POST['adresse'])) {
+            if ($_FILES['image']['error'] == 4) {
+                $error = ERROR_IMAGE_NOTHING;
+            }
+            if ($_FILES['image']['error'] == 0) {
+                if ($_FILES['image']['size'] > 150000) {
+                    $error = ERROR_IMAGE_HEAVY;
+                }
+                $extension = strchr($_FILES['image']['name'], '.');
+                if ($extension != '.jpg' and $extension != '.png') {
+                    $error = ERROR_IMAGE_EXTENSION;
+                }
+                if (!isset($error)) {
+                    $image_chemin = './assets/img/' . uniqid() . $extension;
+                    move_uploaded_file($_FILES['image']['tmp_name'], $image_chemin);
+                }
+            }
+            if (isset($_POST['nom']) and isset($_POST['adresse']) and isset($image_chemin)) {
                 $nom = $_POST['nom'];
                 $adresse = $_POST['adresse'];
-                $this->tableManager->addClient($nom, $adresse);
+                $this->tableManager->addClient($nom, $adresse, $image_chemin ?? '');
                 header('Location: client');
             }
         }
@@ -117,21 +136,32 @@ class TableController
     public function removeClient()
     {
         $this->getClean();
+        require_once './Views/errors.php';
         $client_index = $_POST['client-index'];
-        $this->tableManager->deleteClient($client_index);
-
-        header('Location: client');
+        try {
+            $this->tableManager->deleteClient($client_index);
+            header('Location: client');
+        } catch (PDOException $e) {
+            if ($e->getCode() == 23503) {
+                $nombre_commandes = $this->tableManager->errorSupprClient($client_index);
+                $error = ERROR_BDD_FKEY . '(' . 'nombre de commandes :' . $nombre_commandes->count . ')';
+                $clients = $this->tableManager->getClients();
+                $table = 'client';
+                require_once './Views/table.php';
+            }
+        }
     }
     public function show_table_commande()
     {
         $this->getClean();
-        $clients = $this->tableManager->getCommandes();
+        $commandes = $this->tableManager->getCommandes();
         $table = 'commande';
         require_once './Views/table.php';
     }
     public function addCommande()
     {
         $this->getClean();
+        $clients = $this->tableManager->getClients();
         $form = 'commande';
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['client'])) {
