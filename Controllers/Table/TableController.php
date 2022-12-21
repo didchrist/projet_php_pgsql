@@ -26,7 +26,9 @@ class TableController
             'article-index' => FILTER_SANITIZE_NUMBER_INT,
             'client-index' => FILTER_SANITIZE_NUMBER_INT,
             'client' => FILTER_SANITIZE_NUMBER_INT,
-            'id' => FILTER_SANITIZE_NUMBER_INT
+            'id' => FILTER_SANITIZE_NUMBER_INT,
+            'article_id' => FILTER_SANITIZE_NUMBER_INT,
+            'quantite' => FILTER_SANITIZE_NUMBER_INT
         ]);
     }
 
@@ -59,43 +61,60 @@ class TableController
 
         header('Location: article');
     }
-    /* public function setArticle()
+    public function setArticle()
     {
         $this->getClean();
-        $article_index = $_POST['article-index'] ?? '';
-
-        $article = $this->articleManager->getArticle($article_index);
-        $title = $article->titre;
-        $description = $article->description;
-        $option = $article->idcat;
-         else {
-            $title = $_POST['title'] ?? '';
-            $description = $_POST['description'] ?? '';
-            $option = $_POST['category'] ?? '';
+        $article_index = $_POST['article-index'];
+        $article = $this->tableManager->getArticle($article_index);
+        if (isset($_POST['designation']) and isset($_POST['prixUnitaire'])) {
+            $designation = $_POST['designation'];
+            $prixUnitaire = $_POST['prixUnitaire'];
+            $this->tableManager->updateArticle($designation, $prixUnitaire, $article_index);
+            echo '<div>
+            <p>'.$article->numarticle.'</p>
+        </div>
+        <div>
+            <p>'.$article->designation.'</p>
+        </div>
+        <div>
+            <p>'.$article->prixunitaire.' €</p>
+        </div>
+        <div>
+            <p></p>
+        </div>
+        <div>
+            <form action="setArticle" method="POST" onsubmit="modifierArticle(event, this)">
+                <button type="submit" class="button-modify">Modifier</button>
+                <input type="hidden" name="article-index" value="'.$article->id.'">
+            </form>
+            <form action="supprArticle" method="POST">
+                <input type="hidden" name="article-index" value="'.$article->id.'">
+                <button type="submit" class="button-show">Afficher</button>
+                <button type="submit" class="button-delete">Supprimer</button>
+            </form>
+        </div>';
+        } else {
+            echo '<form action="" method="POST" onsubmit="confirmModifierArticle(event, this)">
+        <div>
+            <p>'.$article->numarticle.'</p>
+        </div>
+        <div>
+            <input type="text" name="designation" value="'.$article->designation.'">
+        </div>
+        <div>
+            <input type="number" name="prixUnitaire" value="'.$article->prixunitaire.'" >
+        </div>
+        <div>
+            <p></p>
+        </div>
+        <div>
+                <button type="submit" class="button-modify">Valider</button>
+                <input type="hidden" name="article-index" value="'.$article->id.'">
+                <a href="article" class="button-delete">Annuler</a>
+        </div>
+        </form>';
         }
-
-        $this->userManager = new UserManager;
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            if (isset($title) and isset($description) and isset($option) and $article_index === '') {
-
-                $this->articleManager->addArticle($title, $image_chemin, $description, $option, $iduser);
-                header('Location: article');
-            }
-
-            if (isset($_POST['validate']) and $article_index != '' and isset($title) and isset($description) and isset($option)) {
-                $article = $this->articleManager->getArticle($article_index);
-                if ($image_chemin !== '') {
-                    $imagename = $article->image;
-                    unlink($imagename);
-                } else {
-                    $image_chemin = $article->image;
-                }
-                $this->articleManager->updateArticle($title, $image_chemin, $description, $option, $article_index);
-                header('Location: homepage');
-             require_once './Views/form_table.php.php';
-    } */
+    } 
     public function show_table_client()
     {
         $this->getClean();
@@ -182,5 +201,41 @@ class TableController
         $articles = $this->tableManager->getArticles();
         $ligneCommandes = $this->tableManager->getligneCommandes($id);
         require_once './Views/table.php';
+    }
+    public function chercherCodeArticle()
+    {
+        $article_id = $_POST['article_id'];
+        $article = $this->tableManager->getArticle($article_id);
+        echo $article->prixunitaire. ' €';
+    }
+    public function addLigneCommande()
+    {
+        $this->getClean();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $article_id = $_POST['article_id'];
+            $id = $_POST['id'];
+            $quantite = $_POST['quantite'];
+            $this->tableManager->addLigneCommande($id, $article_id, $quantite);
+            $lastLignecommande = $this->tableManager->getlastligneCommandes($id);
+            echo '<div class="ligne">
+            <div>
+                <p>'.$lastLignecommande->numarticle.'</p>
+            </div>
+            <div>
+                <p>'.$lastLignecommande->designation.'</p>
+            </div>
+            <div>
+                <p>'.$lastLignecommande->prixunitaire.' €</p>
+            </div>
+            <div>
+                <p>'.$lastLignecommande->quantite.'</p>
+            </div>
+            <div>
+                <p>'.$lastLignecommande->total.' €</p>
+            </div>
+        </div>';
+        }
+
+
     }
 }

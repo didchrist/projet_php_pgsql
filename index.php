@@ -1,6 +1,7 @@
 <?php
 
 use Controllers\Table\TableController;
+use Models\Table\TableManager;
 
 function autoload($class)
 {
@@ -9,6 +10,7 @@ function autoload($class)
 spl_autoload_register("autoload");
 
 $tableController = new TableController();
+
 
 $page = $_GET['page'] ?? '';
 
@@ -44,9 +46,25 @@ if (empty($page)) {
     } elseif ($page === 'ligneCommande') {
         $tableController->show_ligneCommandes();
         $style = './assets/css/table.css';
+    } elseif ($page === 'chercheCode') {
+        $tableController->chercherCodeArticle();
+    } elseif ($page === 'addLigneCommande') {
+        $tableController->addLigneCommande();
+    } elseif ($page === 'homepage') {
+        require_once './Views/homepage.php';
+    } elseif ($page === 'setArticle') {
+        $tableController->setArticle();
     }
 }
 
 $content = ob_get_clean();
 
-require_once './Views/template/template.php';
+if ($page === 'chercheCode') {
+    require_once './Views/template/template_bis.php';
+} elseif($page === 'addLigneCommande') {
+    require_once './Views/template/template_bis.php';
+} elseif ($page === 'setArticle') {
+    require_once './Views/template/template_bis.php';
+} else {
+    require_once './Views/template/template.php';
+}

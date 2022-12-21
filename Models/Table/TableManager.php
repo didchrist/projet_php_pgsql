@@ -15,11 +15,11 @@ class TableManager extends Database
         $statement->closeCursor();
         return $articles;
     }
-    public function updateArticle($designation, $prixUnitaire)
+    public function updateArticle($designation, $prixUnitaire, $id)
     {
-        $req = 'UPDATE article SET designation = ?, prixUnitaire = ?';
+        $req = 'UPDATE article SET designation = ?, prixUnitaire = ? WHERE id = ?';
         $statement = $this->getBdd()->prepare($req);
-        $statement->execute([$designation, $prixUnitaire]);
+        $statement->execute([$designation, $prixUnitaire, $id]);
     }
     public function deleteArticle($id)
     {
@@ -32,6 +32,15 @@ class TableManager extends Database
         $req = 'INSERT INTO article (designation, prixUnitaire) VALUES (?, ?)';
         $statement = $this->getBdd()->prepare($req);
         $statement->execute([$designation, $prixUnitaire]);
+    }
+    public function getArticle($id)
+    {
+        $req = 'SELECT * FROM article WHERE id = ?';
+        $statement = $this->getBdd()->prepare($req);
+        $statement->execute([$id]);
+        $article = $statement->fetch();
+        $statement->closeCursor();
+        return $article;
     }
     public function getClients()
     {
@@ -56,7 +65,7 @@ class TableManager extends Database
     }
     public function getClient($id)
     {
-        $req = 'SELECT * FROM client cl WHERE id = ?';
+        $req = 'SELECT cl.* FROM client cl, commande c WHERE c.client_id = cl.id AND c.id = ?';
         $statement = $this->getBdd()->prepare($req);
         $statement->execute([$id]);
         $client = $statement->fetch();
@@ -89,7 +98,7 @@ class TableManager extends Database
     }
     public function getligneCommandes($id)
     {
-        $req = 'SELECT a.id AS idarticle, c.numeroCommande, a.designation, a.prixUnitaire, lc.quantite, a.prixUnitaire*lc.quantite AS total
+        $req = 'SELECT lc.id, a.id AS idarticle, a.numArticle, c.numCommande, a.designation, a.prixUnitaire, lc.quantite, a.prixUnitaire*lc.quantite AS total
         FROM commande c, article a, client cl , ligneCommande lc 
         WHERE lc.commande_id= c.id AND lc.article_id = a.id AND c.client_id=cl.id AND c.id = ?';
         $statement = $this->getBdd()->prepare($req);
@@ -97,5 +106,23 @@ class TableManager extends Database
         $ligneCommandes = $statement->fetchAll();
         $statement->closeCursor();
         return $ligneCommandes;
+    }
+    public function getlastligneCommandes($id)
+    {
+        $req = 'SELECT lc.id, a.id AS idarticle, a.numArticle, c.numCommande, a.designation, a.prixUnitaire, lc.quantite, a.prixUnitaire*lc.quantite AS total
+        FROM commande c, article a, client cl , ligneCommande lc 
+        WHERE lc.commande_id= c.id AND lc.article_id = a.id AND c.client_id=cl.id AND c.id = ?
+        ORDER BY id DESC LIMIT 1';
+        $statement = $this->getBdd()->prepare($req);
+        $statement->execute([$id]);
+        $lastLigneCommande = $statement->fetch();
+        $statement->closeCursor();
+        return $lastLigneCommande;
+    }
+    public function addLigneCommande($commande_id, $article_id, $quantite)
+    {
+        $req = 'INSERT INTO lignecommande (commande_id, article_id, quantite) VALUES (?, ?, ?)';
+        $statement = $this->getBdd()->prepare($req);
+        $statement->execute([$commande_id, $article_id, $quantite]);
     }
 }

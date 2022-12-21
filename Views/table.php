@@ -23,9 +23,9 @@
         </div>
     </div>
     <?php foreach ($articles as $article) : ?>
-    <div class="ligne">
+    <div id="<?= $article->id ?>" class="ligne">
         <div>
-            <p><?= $article->numeroarticle; ?></p>
+            <p><?= $article->numarticle; ?></p>
         </div>
         <div>
             <p><?= $article->designation; ?></p>
@@ -37,7 +37,7 @@
             <p></p>
         </div>
         <div>
-            <form action="setArticle" method="POST">
+            <form action="setArticle" method="POST" onsubmit="modifierArticle(event, this)">
                 <button type="submit" class="button-modify">Modifier</button>
                 <input type="hidden" name="article-index" value="<?= $article->id ?>">
             </form>
@@ -85,7 +85,7 @@
             <img src="<?= $client->image ?>" alt="" width="25%">
         </div>
         <div>
-            <p><?= $client->numeroclient; ?></p>
+            <p><?= $client->numclient; ?></p>
         </div>
         <div>
             <p><?= $client->nomclient; ?></p>
@@ -139,7 +139,7 @@
     <?php foreach ($commandes as $commande) : ?>
     <div class="ligne">
         <div>
-            <p><?= $commande->numerocommande; ?></p>
+            <p><?= $commande->numcommande; ?></p>
         </div>
         <div>
             <p><?= $commande->datecommande; ?></p>
@@ -168,7 +168,7 @@
     <?php elseif ($table === 'ligneCommande') : ?>
     <div>
         <label for="numero">Numéro : </label>
-        <input name="numero" value="<?= $client->numeroclient ?? '' ?>" type="text" readonly>
+        <input name="numero" value="<?= $client->numclient ?? '' ?>" type="text" readonly>
         <label for="date">Date : </label>
         <input name="date" value="<?= $client->date ?? '' ?>" type="text" readonly>
         <label for="client">Client : </label>
@@ -199,8 +199,8 @@
             <p>Auto-généré</p>
         </div>
         <div>
-            <form action="" method="POST">
-                <select name="designation">
+            <form action="addLigneCommande" method="POST" onsubmit="addLigneCommande(event)">
+                <select name="article_id" id="select_article" onchange="chercherCodeArticle()">
                     <?php foreach ($articles as $article) : ?>
                     <option value="<?= $article->id ?>" onchange="prixUnitaire(this.value)"><?= $article->designation ?>
                     </option>
@@ -208,12 +208,13 @@
                 </select>
         </div>
         <div>
-            <p id="prixunitaire"></p>
+            <p id="pu">Selectionner un produit</p>
         </div>
         <div>
-            <input name="quantite" type="number">
+            <input name="quantite" type="number" id="quantite">
         </div>
         <div>
+            <input type="hidden" name="id" id="commande_id" value="<?= $id ?>">
             <button class="button-modify" type="submit">Valider</button>
             </form>
         </div>
@@ -221,19 +222,19 @@
     <?php foreach ($ligneCommandes as $lignecommande) : ?>
     <div class="ligne">
         <div>
-            <p><?= $lignecommande->numeroarticle; ?></p>
+            <p><?= $lignecommande->numarticle; ?></p>
         </div>
         <div>
             <p><?= $lignecommande->designation; ?></p>
         </div>
         <div>
-            <p><?= $lignecommande->prixunitaire; ?></p>
+            <p><?= $lignecommande->prixunitaire; ?> €</p>
         </div>
         <div>
             <p><?= $lignecommande->quantite; ?></p>
         </div>
         <div>
-            <p><?= $lignecommande->total; ?></p>
+            <p><?= $lignecommande->total; ?> €</p>
         </div>
     </div>
     <?php endforeach; ?>
@@ -248,14 +249,65 @@ function confirmer() {
         return false;
     }
 }
-
-function prixUnitaire(valeur) {
-    var xml = new XMLHttpRequest();
-    xml.open('POST', 'index.php?page=ligneCommande');
-    xml.onload = () => {
-        var data = JSON.parse(request.reponseText);
-        document.getElementById("prixunitaire").innerHTML = valeur;
+function chercherCodeArticle() {
+    var article_id = document.getElementById("select_article").value;
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'index.php?page=chercheCode');
+    var data = new FormData();
+    data.append("article_id", article_id);
+    xhr.send(data);
+    xhr.onload = function() {
+        var response = xhr.responseText;
+        document.getElementById('pu').innerHTML = response;
+        document.getElementById('quantite').focus(); 
     }
-    xml.send();
 }
+function addLigneCommande(event) {
+    event.preventDefault();
+    var article_id = document.getElementById("select_article").value;
+    var commande_id = document.getElementById("commande_id").value;
+    var quantite = document.getElementById("quantite").value;
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'index.php?page=addLigneCommande');
+    var data = new FormData();
+    data.append("article_id", article_id);
+    data.append("id", commande_id);
+    data.append("quantite", quantite);
+    xhr.send(data);
+    xhr.onload = function() {
+        var response = xhr.responseText;
+        var tableau = Array.from (document.querySelectorAll(".ligne")).pop();
+        tableau.insertAdjacentHTML('afterend', response);
+    }
+}
+function modifierArticle(event, form) {
+    event.preventDefault();
+    var data = new FormData(form);
+    var id = data.get('article-index');
+    data.append("article-index", id);
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'index.php?page=setArticle');
+    xhr.send(data);
+    xhr.onload = function() {
+        var response = xhr.response;
+        document.getElementById(id).innerHTML = response;
+    }
+function confirmModifierArticle(event, form) {
+    event.preventDefault();
+    var data = new FormData(form);
+    var id = data.get('article-index');
+    var prixUnitaire = data.get('prixUnitaire');
+    var designation = data.get('designation');
+    data.append("article-index", id);
+    data.append("prixUnitaire");
+    data.append("designation");
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'index.php?page=setArticle');
+    xhr.send(data);
+    xhr.onload = function() {
+        var response = xhr.response;
+        document.getElementById(id).innerHTML = response;
+    }
+}
+} 
 </script>
