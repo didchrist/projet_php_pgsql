@@ -29,6 +29,7 @@
                 <a href="homepage">
                     <li>Accueil</li>
                 </a>
+                <?php if(isset($_SESSION['user']) and isset($_SESSION['password'])): ?>
                 <a href="article">
                     <li>Article</li>
                 </a>
@@ -38,9 +39,10 @@
                 <a href="commande">
                     <li>Commande</li>
                 </a>
-                <a href="#">
+                <a href="quitter">
                     <li>Quitter</li>
                 </a>
+                <?php endif; ?>
             </ul>
         </div>
     </header>
