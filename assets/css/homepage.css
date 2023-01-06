@@ -1,112 +1,197 @@
 .section-form {
-    width: 80%;
-    border: 1px solid rgba(0, 0, 0, 0.493);
-    height: 80%;
-    border-radius: 20px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: relative;
+  width: 80%;
+  border: 1px solid rgba(0, 0, 0, 0.493);
+  height: 80%;
+  border-radius: 20px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
 .form-titre {
-    font-size: 2.6rem;
-    color: rgba(40, 110, 176, 0.603);
-    position: absolute;
-    top: 0;
+  font-size: 2.6rem;
+  color: rgba(40, 110, 176, 0.603);
+  position: absolute;
+  top: 0;
 }
 .carre-titre {
-    background-color: rgba(40, 40, 176, 0.603);
-    color: white;
-    border-radius: 5px;
+  background-color: rgba(40, 40, 176, 0.603);
+  color: white;
+  border-radius: 5px;
 }
 .titre-sql {
-    color: rgba(40, 40, 176, 0.603);
+  color: rgba(40, 40, 176, 0.603);
 }
 label {
-    font-size: 2rem;
-    padding: 5px;
+  font-size: 2rem;
+  padding: 5px;
 }
 button {
-    padding: 5px;
-    border: 1px solid rgba(0, 0, 0, 0.507);
-    background-color: rgba(0, 0, 255, 0.596);
-    border-radius: 2px;
-    font-size: 1.8rem;
-    color: white;
-    width: 100%;
-    transition: 0.5s;
+  padding: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.507);
+  background-color: rgba(0, 0, 255, 0.596);
+  border-radius: 2px;
+  font-size: 1.8rem;
+  color: white;
+  width: 100%;
+  transition: 0.5s;
 }
 button:hover {
-    cursor: pointer;
-    background-color: rgba(85, 121, 151, 0.76);
-    border: 1px ridge rgba(0, 0, 255, 0.596);
+  cursor: pointer;
+  background-color: rgba(85, 121, 151, 0.76);
+  border: 1px ridge rgba(0, 0, 255, 0.596);
 }
 .div-button {
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40%;
 }
 .form-input {
-    display: flex;
-    flex-direction: column;
-    padding: 5px;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  width: 100%;
 }
 input {
-    height: 30px;
-    color: rgba(0, 0, 0, 0.823);
-    padding-left: 10px;
+  height: 30px;
+  color: rgba(0, 0, 0, 0.823);
+  padding-left: 10px;
 }
 input:focus {
-    background-color: rgba(29, 179, 29, 0.724);
-    border: 1px solid rgba(166, 46, 46, 0.654);
+  background-color: rgba(29, 179, 29, 0.724);
+  border: 1px solid rgba(166, 46, 46, 0.654);
 }
 .message-box {
-    position: absolute;
-    top: 20%;
+  position: absolute;
+  top: 16%;
 }
-.error-box p{
-    color: white;
-    background-color: rgba(255, 0, 0, 0.714);
-    border: 1px solid rgba(0, 0, 0, 0.508);
-    padding: 10px;
-    border-radius: 5px;
+.error-box p {
+  color: white;
+  background-color: rgba(255, 0, 0, 0.714);
+  border: 1px solid rgba(0, 0, 0, 0.508);
+  padding: 10px;
+  border-radius: 5px;
 }
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    padding-top: 100px;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);;
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
 }
 .modal-content {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 40%;
+  border-radius: 5px;
+  border: 1px double rgba(38, 72, 145, 0.596);
 }
 .close {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
 }
 .close:hover,
 .close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.form-modal {
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+  width: 100%;
+}
+.checkbox {
+  border: 1px solid black;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.5s ease-in, color 0.5s;
+  margin: 10px;
+}
+.checkbox:hover {
+  background-color: rgba(0, 0, 0, 0.733);
+  color: white;
+}
+.checkbox:hover,
+.checkbox label:hover,
+.checkbox input:hover {
+  cursor: pointer;
+  pointer-events: auto;
+}
+.superdroit {
+  display: flex;
+}
+.modal-content ul {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  background-color: rgba(59, 57, 57, 0.829);
+  border-radius: 5px;
+  width: 80%;
+  padding-left: 10px;
+}
+.modal-content ul li {
+  width: 100%;
+  text-align: center;
+}
+.ong1,
+.ong2 {
+  border-right: 1px solid white;
+}
+.modal-content ul li a {
+  text-decoration: none;
+  color: white;
+  font-size: 2rem;
+  padding: 20px;
+}
+.modal-content ul li a:hover {
+  background-color: none;
+}
+.ong1-form,
+.ong2-form,
+.ong3-form {
+  display: none;
+  height: 250px;
+  margin-top: 20px;
+  border-top: 1px solid black;
+  width: 100%;
+}
+.ong1-form {
+  display: block;
+}
+.modal-select {
+  width: 100%;
+}
+.modal-select select {
+  width: 100%;
+  height: 100px;
+}
+.modal-select select option {
+  padding-left: 10px;
+  padding-top: 5px;
+}
+.modal-select label {
+  margin-bottom: 10px;
+}
+.titre-modal {
+  font-size: 2.4rem;
+  text-align: center;
 }

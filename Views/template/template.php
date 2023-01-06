@@ -29,7 +29,7 @@
                 <a href="homepage">
                     <li>Accueil</li>
                 </a>
-                <?php if(isset($_SESSION['user']) and isset($_SESSION['password'])): ?>
+                <?php if (isset($_SESSION['user']) and isset($_SESSION['password'])) : ?>
                 <a href="article">
                     <li>Article</li>
                 </a>
@@ -47,6 +47,12 @@
         </div>
     </header>
     <section>
+        <?php if (isset($_SESSION['user']) and isset($_SESSION['password'])) : ?>
+        <div class="show-role">
+            <p><?= 'Niveau : ' . ($role ?? 'Personnalisé') ?></p>
+            <p><?= $_SESSION['user'] ?></p>
+        </div>
+        <?php endif; ?>
         <?= $content ?? 'Block' ?>
     </section>
     <footer>
