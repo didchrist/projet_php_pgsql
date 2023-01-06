@@ -71,13 +71,13 @@ class TableController
             $prixUnitaire = $_POST['prixUnitaire'];
             $this->tableManager->updateArticle($designation, $prixUnitaire, $article_index);
             echo '<div>
-            <p>'.$article->numarticle.'</p>
+            <p>' . $article->numarticle . '</p>
         </div>
         <div>
-            <p>'.$article->designation.'</p>
+            <p>' . $article->designation . '</p>
         </div>
         <div>
-            <p>'.$article->prixunitaire.' €</p>
+            <p>' . $article->prixunitaire . ' €</p>
         </div>
         <div>
             <p></p>
@@ -85,36 +85,36 @@ class TableController
         <div>
             <form action="setArticle" method="POST" onsubmit="modifierArticle(event, this)">
                 <button type="submit" class="button-modify">Modifier</button>
-                <input type="hidden" name="article-index" value="'.$article->id.'">
+                <input type="hidden" name="article-index" value="' . $article->id . '">
             </form>
             <form action="supprArticle" method="POST">
-                <input type="hidden" name="article-index" value="'.$article->id.'">
+                <input type="hidden" name="article-index" value="' . $article->id . '">
                 <button type="submit" class="button-show">Afficher</button>
                 <button type="submit" class="button-delete">Supprimer</button>
             </form>
         </div>';
         } else {
-            echo '<form action="" method="POST" onsubmit="confirmModifierArticle(event, this)">
+            echo '<form action="" method="POST" id="form-ajax">
         <div>
-            <p>'.$article->numarticle.'</p>
+            <p>' . $article->numarticle . '</p>
         </div>
         <div>
-            <input type="text" name="designation" value="'.$article->designation.'">
+            <input type="text" name="designation" value="' . $article->designation . '">
         </div>
         <div>
-            <input type="number" name="prixUnitaire" value="'.$article->prixunitaire.'" >
+            <input type="number" name="prixUnitaire" value="' . $article->prixunitaire . '" >
         </div>
         <div>
             <p></p>
         </div>
         <div>
                 <button type="submit" class="button-modify">Valider</button>
-                <input type="hidden" name="article-index" value="'.$article->id.'">
+                <input type="hidden" name="article-index" value="' . $article->id . '">
                 <a href="article" class="button-delete">Annuler</a>
         </div>
         </form>';
         }
-    } 
+    }
     public function show_table_client()
     {
         $this->getClean();
@@ -206,7 +206,7 @@ class TableController
     {
         $article_id = $_POST['article_id'];
         $article = $this->tableManager->getArticle($article_id);
-        echo $article->prixunitaire. ' €';
+        echo $article->prixunitaire . ' €';
     }
     public function addLigneCommande()
     {
@@ -219,23 +219,21 @@ class TableController
             $lastLignecommande = $this->tableManager->getlastligneCommandes($id);
             echo '<div class="ligne">
             <div>
-                <p>'.$lastLignecommande->numarticle.'</p>
+                <p>' . $lastLignecommande->numarticle . '</p>
             </div>
             <div>
-                <p>'.$lastLignecommande->designation.'</p>
+                <p>' . $lastLignecommande->designation . '</p>
             </div>
             <div>
-                <p>'.$lastLignecommande->prixunitaire.' €</p>
+                <p>' . $lastLignecommande->prixunitaire . ' €</p>
             </div>
             <div>
-                <p>'.$lastLignecommande->quantite.'</p>
+                <p>' . $lastLignecommande->quantite . '</p>
             </div>
             <div>
-                <p>'.$lastLignecommande->total.' €</p>
+                <p>' . $lastLignecommande->total . ' €</p>
             </div>
         </div>';
         }
-
-
     }
 }

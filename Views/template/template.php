@@ -30,15 +30,21 @@
                     <li>Accueil</li>
                 </a>
                 <?php if (isset($_SESSION['user']) and isset($_SESSION['password'])) : ?>
+                <?php if ($_SESSION['permissions']["article"]['SELECT']) : ?>
                 <a href="article">
                     <li>Article</li>
                 </a>
+                <?php endif; ?>
+                <?php if ($_SESSION['permissions']["client"]['SELECT']) : ?>
                 <a href="client">
                     <li>Client</li>
                 </a>
+                <?php endif; ?>
+                <?php if ($_SESSION['permissions']["commande"]['SELECT']) : ?>
                 <a href="commande">
                     <li>Commande</li>
                 </a>
+                <?php endif; ?>
                 <a href="quitter">
                     <li>Quitter</li>
                 </a>

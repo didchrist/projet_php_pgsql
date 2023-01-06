@@ -249,6 +249,7 @@ function confirmer() {
         return false;
     }
 }
+
 function chercherCodeArticle() {
     var article_id = document.getElementById("select_article").value;
     var xhr = new XMLHttpRequest();
@@ -259,9 +260,10 @@ function chercherCodeArticle() {
     xhr.onload = function() {
         var response = xhr.responseText;
         document.getElementById('pu').innerHTML = response;
-        document.getElementById('quantite').focus(); 
+        document.getElementById('quantite').focus();
     }
 }
+
 function addLigneCommande(event) {
     event.preventDefault();
     var article_id = document.getElementById("select_article").value;
@@ -276,10 +278,11 @@ function addLigneCommande(event) {
     xhr.send(data);
     xhr.onload = function() {
         var response = xhr.responseText;
-        var tableau = Array.from (document.querySelectorAll(".ligne")).pop();
+        var tableau = Array.from(document.querySelectorAll(".ligne")).pop();
         tableau.insertAdjacentHTML('afterend', response);
     }
 }
+
 function modifierArticle(event, form) {
     event.preventDefault();
     var data = new FormData(form);
@@ -292,6 +295,11 @@ function modifierArticle(event, form) {
         var response = xhr.response;
         document.getElementById(id).innerHTML = response;
     }
+    formulaire = document.getElementById('form-ajax');
+    formulaire.addEventListener('submit', confirmModifierArticle(event, this));
+
+}
+
 function confirmModifierArticle(event, form) {
     event.preventDefault();
     var data = new FormData(form);
@@ -309,5 +317,4 @@ function confirmModifierArticle(event, form) {
         document.getElementById(id).innerHTML = response;
     }
 }
-} 
 </script>

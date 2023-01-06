@@ -75,7 +75,7 @@ if (isset($_SESSION['user']) and isset($_SESSION['password'])) {
         case 'quitter':
             $userController->disconnect();
             break;
-        case  'test':
+        case 'test':
             $userController->getPermission();
             break;
         default:

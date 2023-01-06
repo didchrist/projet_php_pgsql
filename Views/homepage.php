@@ -1,5 +1,5 @@
 <section class="section-form">
-    <?php if (isset($_SESSION['user']) and isset($_SESSION['password'])) : ?>
+    <?php if (isset($_SESSION['user']) and isset($_SESSION['password']) and ($_SESSION['superuser'] or $_SESSION['addrole'])) : ?>
     <div class="form-titre">
         <h2>Ajouter un utilisateur</h2>
     </div>
@@ -32,15 +32,18 @@
                         <label for="allowShowArticle">Consulter les articles</label>
                     </div>
                     <div class="checkbox">
-                        <input type="checkbox" name="allowAddArticle" id="allowAddArticle">
+                        <input type="checkbox" name="allowAddArticle" id="allowAddArticle"
+                            onchange="selectArticle(this)">
                         <label for="allowAddArticle">Ajouter des articles</label>
                     </div>
                     <div class="checkbox">
-                        <input type="checkbox" name="allowModifyArticle" id="allowModifyArticle">
+                        <input type="checkbox" name="allowModifyArticle" id="allowModifyArticle"
+                            onchange="selectArticle(this)">
                         <label for="allowModifyArticle">Modifier des articles</label>
                     </div>
                     <div class="checkbox">
-                        <input type="checkbox" name="allowDeleteArticle" id="allowDeleteArticle">
+                        <input type="checkbox" name="allowDeleteArticle" id="allowDeleteArticle"
+                            onchange="selectArticle(this)">
                         <label for="allowDeleteArticle">Supprimer des articles</label>
                     </div>
                 </div>
@@ -50,15 +53,17 @@
                         <label for="allowShowClient">Consulter la liste client</label>
                     </div>
                     <div class="checkbox">
-                        <input type="checkbox" name="allowAddClient" id="allowAddClient">
+                        <input type="checkbox" name="allowAddClient" id="allowAddClient" onchange="selectClient(this)">
                         <label for="allowAddClient">Ajouter des clients</label>
                     </div>
                     <div class="checkbox">
-                        <input type="checkbox" name="allowModifyClient" id="allowModifyClient">
+                        <input type="checkbox" name="allowModifyClient" id="allowModifyClient"
+                            onchange="selectClient(this)">
                         <label for="allowModifyClient">Modifier des informations client</label>
                     </div>
                     <div class="checkbox">
-                        <input type="checkbox" name="allowDeleteClient" id="allowDeleteClient">
+                        <input type="checkbox" name="allowDeleteClient" id="allowDeleteClient"
+                            onchange="selectClient(this)">
                         <label for="allowDeleteClient">Supprimer des clients</label>
                     </div>
                 </div>
@@ -68,15 +73,18 @@
                         <label for="allowShowCommande">Consulter les commandes</label>
                     </div>
                     <div class="checkbox">
-                        <input type="checkbox" name="allowAddCommande" id="allowAddCommande">
+                        <input type="checkbox" name="allowAddCommande" id="allowAddCommande"
+                            onchange="selectCommande(this)">
                         <label for="allowAddCommande">Ajouter des commandes</label>
                     </div>
                     <div class="checkbox">
-                        <input type="checkbox" name="allowModifyCommande" id="allowModifyCommande">
+                        <input type="checkbox" name="allowModifyCommande" id="allowModifyCommande"
+                            onchange="selectCommande(this)">
                         <label for="allowModifyCommande">Modifier des commandes</label>
                     </div>
                     <div class="checkbox">
-                        <input type="checkbox" name="allowDeleteCommande" id="allowDeleteCommande">
+                        <input type="checkbox" name="allowDeleteCommande" id="allowDeleteCommande"
+                            onchange="selectCommande(this)">
                         <label for="allowDeleteCommande">Supprimer des commandes</label>
                     </div>
                 </div>
@@ -108,7 +116,7 @@
             <input id="more" type="checkbox" name="more" checked>
         </div>
     </form>
-    <?php else : ?>
+    <?php elseif (!isset($_SESSION['user']) or !isset($_SESSION['password'])) : ?>
     <div class="form-titre">
         <h2>Connection à <span class="carre-titre">Postgre</span><span class="titre-sql">SQL</span></h2>
     </div>
@@ -131,6 +139,7 @@
         </div>
     </form>
     <?php endif; ?>
+    <!-- <?php var_dump($_SESSION['permissions']); ?> -->
 </section>
 <script>
 function addUser(e, form) {
@@ -228,14 +237,53 @@ function superuserchange(checkbox) {
     tableau.push(document.getElementById('allowDeleteCommande'));
     if (checkbox.checked == true) {
         tableau.forEach(function(element) {
-            element.setAttribute("onclick", "return false");
-            element.setAttribute("checked", "true");
+            if (element.checked == false) {
+                element.setAttribute("onclick", "return false");
+                element.setAttribute("checked", "true");
+            }
+
         });
     } else {
         tableau.forEach(function(element) {
-            element.removeAttribute("onclick");
-            element.removeAttribute("checked");
+            if (element.checked == true) {
+                element.removeAttribute("onclick");
+                element.removeAttribute("checked");
+            }
+
         });
+    }
+}
+
+function selectArticle(checkbox) {
+    var defautArticle = document.getElementById("allowShowArticle");
+    if (checkbox.checked == true && defautArticle.checked != true) {
+        defautArticle.setAttribute("onclick", "return false");
+        defautArticle.setAttribute("checked", "true");
+    } else if (checkbox.checked == false && defautArticle.checked != false) {
+        defautArticle.removeAttribute("onclick");
+        defautArticle.removeAttribute("checked");
+    }
+}
+
+function selectClient(checkbox) {
+    var defautClient = document.getElementById("allowShowClient");
+    if (checkbox.checked == true && defautClient.checked != true) {
+        defautClient.setAttribute("onclick", "return false");
+        defautClient.setAttribute("checked", "true");
+    } else if (checkbox.checked == false && defautClient.checked != false) {
+        defautClient.removeAttribute("onclick");
+        defautClient.removeAttribute("checked");
+    }
+}
+
+function selectCommande(checkbox) {
+    var defautCommande = document.getElementById("allowShowCommande");
+    if (checkbox.checked == true && defautCommande.checked != true) {
+        defautCommande.setAttribute("onclick", "return false");
+        defautCommande.setAttribute("checked", "true");
+    } else if (checkbox.checked == false && defautCommande.checked != false) {
+        defautCommande.removeAttribute("onclick");
+        defautCommande.removeAttribute("checked");
     }
 }
 </script>

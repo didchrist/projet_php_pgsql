@@ -45,6 +45,7 @@ class UserController
                 $this->userManager->verifUser($user, $pwd);
                 $_SESSION['user'] = $user;
                 $_SESSION['password'] = $pwd;
+                $this->getPermission();
                 header("Location: homepage");
             } catch (PDOException $e) {
                 $error = 'Impossible de se connecter.';
@@ -147,11 +148,20 @@ class UserController
                         }
                     }
                 }
+                if (!isset($tableauPermissions[$table])) {
+                    $tableauPermissions[$table]['SELECT'] = false;
+                    $tableauPermissions[$table]['INSERT'] = false;
+                    $tableauPermissions[$table]['UPDATE'] = false;
+                    $tableauPermissions[$table]['DELETE'] = false;
+                }
             }
         }
-        var_dump($superuser);
-        var_dump($addRole);
-        var_dump($tableauPermissions);
+        $_SESSION['superuser'] = $superuser;
+        $_SESSION['addrole'] = $addRole;
+        $_SESSION['permissions'] = $tableauPermissions;
+        /* var_dump($_SESSION['superuser']);
+        var_dump($_SESSION['addrole']);
+        var_dump($_SESSION['permissions']); */
         /* SELECT * FROM pg_catalog.pg_user */
         /* SELECT * FROM pg_catalog.pg_roles */
     }
