@@ -23,10 +23,10 @@ class UserManager extends Database
         $statement = $this->getBdd()->prepare($req);
         $statement->execute();
     }
-    public function setpermission()
+    public function getPermission()
     {
         $req = "SELECT GRANTOR, GRANTEE, TABLE_NAME, PRIVILEGE_TYPE, IS_GRANTABLE
-        FROM   INFORMATION_SCHEMA.COLUMN_PRIVILEGES
+        FROM   INFORMATION_SCHEMA.TABLE_PRIVILEGES
         WHERE  GRANTEE = ?
         group by grantee, table_name, grantor, privilege_type, is_grantable
         ORDER  BY GRANTEE, TABLE_NAME, PRIVILEGE_TYPE";
@@ -35,5 +35,16 @@ class UserManager extends Database
         $permissionUser = $statement->fetchAll();
         $statement->closeCursor();
         return $permissionUser;
+    }
+    public function getPermissionByCatalog()
+    {
+        $req = "SELECT *
+        FROM pg_catalog.pg_roles
+        where rolname = ?";
+        $statement = $this->getBdd()->prepare($req);
+        $statement->execute([$_SESSION['user']]);
+        $permission = $statement->fetch();
+        $statement->closeCursor();
+        return $permission;
     }
 }

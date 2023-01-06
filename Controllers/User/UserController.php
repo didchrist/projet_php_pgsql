@@ -129,4 +129,30 @@ class UserController
             }
         }
     }
+    public function getPermission()
+    {
+        $droit = $this->userManager->getPermissionByCatalog();
+        $superuser = $droit->rolsuper;
+        $addRole = $droit->rolcreaterole;
+        $tables = ['article', 'client', 'commande'];
+        $typePermissions = ['SELECT', 'INSERT', 'UPDATE', 'DELETE'];
+        $permissions = $this->userManager->getPermission();
+        foreach ($tables as $table) {
+            foreach ($typePermissions as $typePermission) {
+                foreach ($permissions as $permission) {
+                    if ($table == $permission->table_name) {
+                        $tableauPermissions[$table][$typePermission] = $permission->privilege_type == $typePermission ? true : false;
+                        if ($tableauPermissions[$table][$typePermission]) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        var_dump($superuser);
+        var_dump($addRole);
+        var_dump($tableauPermissions);
+        /* SELECT * FROM pg_catalog.pg_user */
+        /* SELECT * FROM pg_catalog.pg_roles */
+    }
 }

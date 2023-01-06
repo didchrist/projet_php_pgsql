@@ -75,6 +75,9 @@ if (isset($_SESSION['user']) and isset($_SESSION['password'])) {
         case 'quitter':
             $userController->disconnect();
             break;
+        case  'test':
+            $userController->getPermission();
+            break;
         default:
             header('Location: homepage');
     }
@@ -90,13 +93,13 @@ if (isset($_SESSION['user']) and isset($_SESSION['password'])) {
 }
 
 
-                
-                
+
+
 
 $content = ob_get_clean();
 
 switch ($page) {
-    case ($page == 'chercheCode' || $page== 'addLigneCommande' || $page == 'setArticle' || $page == 'addUser'):
+    case ($page == 'chercheCode' || $page == 'addLigneCommande' || $page == 'setArticle' || $page == 'addUser'):
         require_once './Views/template/template_bis.php';
         break;
     default:
